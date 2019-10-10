@@ -1,6 +1,6 @@
 package req.gen;
 
-import commonmodels.transport.Request;
+import commonmodels.Request;
 import req.rand.RandomGenerator;
 
 import java.util.*;

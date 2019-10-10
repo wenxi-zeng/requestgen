@@ -1,7 +1,5 @@
 package req.rand;
 
-import org.apache.commons.math3.util.FastMath;
-
 public class ExpGenerator implements RandomGenerator{
 	RandomGenerator uniform;
 	double lambda;
@@ -25,7 +23,7 @@ public class ExpGenerator implements RandomGenerator{
 
 	@Override
 	public double nextDouble(){
-		return -FastMath.log(1.0-uniform.nextDouble())/lambda;
+		return -Math.log(1.0-uniform.nextDouble())/lambda;
 	}
 
 	@Override

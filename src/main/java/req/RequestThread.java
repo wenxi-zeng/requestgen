@@ -1,11 +1,10 @@
 package req;
 
-import commonmodels.transport.Request;
+import commonmodels.Request;
 import req.gen.RequestGenerator;
 import req.rand.ExpGenerator;
 import req.rand.RandomGenerator;
 import req.rand.UniformGenerator;
-import socket.SocketClient;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -14,8 +13,6 @@ public class RequestThread implements Runnable {
     private final RequestGenerator requestGenerator;
 
     private final RequestGenerateThreadCallBack callBack;
-
-    private final SocketClient socketClient;
 
     private final CountDownLatch latch;
 
@@ -32,7 +29,6 @@ public class RequestThread implements Runnable {
         this.threadId = threadId;
         this.numOfRequests = numOfRequests;
         this.possionGenerator = new ExpGenerator(interArrivalRate, 1, new UniformGenerator());
-        socketClient = SocketClient.newInstance();
     }
 
     @Override
@@ -44,7 +40,6 @@ public class RequestThread implements Runnable {
                 generate();
                 numOfRequests--;
             } else {
-                socketClient.stop();
                 latch.countDown();
                 Thread.currentThread().interrupt();
                 break;
@@ -59,14 +54,14 @@ public class RequestThread implements Runnable {
 
     private void generate() {
         try {
-            Request request = requestGenerator.nextFor(threadId);
-            callBack.onRequestGenerated(request, socketClient);
+            Request request = requestGenerator.next(threadId);
+            callBack.onRequestGenerated(request, threadId);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public interface RequestGenerateThreadCallBack {
-        void onRequestGenerated(Request request, SocketClient client);
+        void onRequestGenerated(Request request, int threadId);
     }
 }

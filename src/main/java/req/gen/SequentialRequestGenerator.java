@@ -1,6 +1,6 @@
 package req.gen;
 
-import commonmodels.transport.Request;
+import commonmodels.Request;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -13,16 +13,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class SequentialRequestGenerator extends RequestGenerator{
 
-    private final Terminal terminal;
-
     private final Map<Integer, Queue<String>> dataPool;
 
     private final int numOfRequest;
 
-    public SequentialRequestGenerator(int numOfThreads, int numOfRequest, String fileName, Terminal terminal) throws IOException {
+    public SequentialRequestGenerator(int numOfThreads, int numOfRequest, String fileName) throws IOException {
         super(0);
 
-        this.terminal = terminal;
         this.numOfRequest = numOfRequest;
         dataPool = new ConcurrentHashMap<>();
         for (int i = 0; i < numOfThreads; i++)
@@ -34,12 +31,10 @@ public class SequentialRequestGenerator extends RequestGenerator{
     }
 
     @Override
-    public Request nextFor(int threadId) throws Exception {
+    public Request next(int threadId) {
         Queue<String> queue = dataPool.get(threadId);
         if (queue != null && !queue.isEmpty()) {
-            Request request = terminal.translate(queue.poll());
-            request.setEpoch(terminal.getEpoch());
-            return request;
+            return Request.translate(queue.poll());
         }
         else return null;
     }

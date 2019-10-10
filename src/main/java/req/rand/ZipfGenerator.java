@@ -1,7 +1,5 @@
 package req.rand;
 
-import org.apache.commons.math3.util.FastMath;
-
 /**
  * The code is copied from Apache common math experimental branch
  *
@@ -132,7 +130,7 @@ public class ZipfGenerator implements RandomGenerator{
 	 * @return {@code H(x)}
 	 */
 	private double hIntegral(final double x){
-		final double logX=FastMath.log(x);
+		final double logX=Math.log(x);
 		return helper2((1d-exponent)*logX)*logX;
 	}
 
@@ -143,7 +141,7 @@ public class ZipfGenerator implements RandomGenerator{
 	 * @return h(x)
 	 */
 	private double h(final double x){
-		return FastMath.exp(-exponent*FastMath.log(x));
+		return Math.exp(-exponent*Math.log(x));
 	}
 
 	/**
@@ -159,7 +157,7 @@ public class ZipfGenerator implements RandomGenerator{
 			// t could be smaller than -1 in some rare cases due to numerical errors.
 			t=-1;
 		}
-		return FastMath.exp(helper1(t)*x);
+		return Math.exp(helper1(t)*x);
 	}
 
 	/**
@@ -171,8 +169,8 @@ public class ZipfGenerator implements RandomGenerator{
 	 * @return {@code log(1+x)/x}
 	 */
 	static double helper1(final double x){
-		if(FastMath.abs(x)>1e-8){
-			return FastMath.log1p(x)/x;
+		if(Math.abs(x)>1e-8){
+			return Math.log1p(x)/x;
 		}else{
 			return 1.-x*((1./2.)-x*((1./3.)-x*(1./4.)));
 		}
@@ -187,8 +185,8 @@ public class ZipfGenerator implements RandomGenerator{
 	 * @return {@code (exp(x)-1)/x} if x is non-zero, or 1 if x=0
 	 */
 	static double helper2(final double x){
-		if(FastMath.abs(x)>1e-8){
-			return FastMath.expm1(x)/x;
+		if(Math.abs(x)>1e-8){
+			return Math.expm1(x)/x;
 		}else{
 			return 1.+x*(1./2.)*(1.+x*(1./3.)*(1.+x*(1./4.)));
 		}

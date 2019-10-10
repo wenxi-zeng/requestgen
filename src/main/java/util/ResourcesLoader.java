@@ -14,9 +14,9 @@ public class ResourcesLoader {
         File file;
 
         if (runInJar())
-            file = new File(getProgramPath() + File.separator + "res");
+            file = new File(getProgramPath() + File.separator + "resources");
         else
-            file = new File("res");
+            file = new File("resources");
 
         URL[] urls = new URL[0];
         try {
@@ -31,9 +31,9 @@ public class ResourcesLoader {
 
     public static String getRelativePathToRes(String filename) throws FileNotFoundException {
         if (runInJar())
-            return getProgramPath() + File.separator + "res" + File.separator + filename;
+            return getProgramPath() + File.separator + "resources" + File.separator + filename;
         else
-            return  "res" + File.separator + filename;
+            return  "resources" + File.separator + filename;
     }
 
     public static String getRelativeFileName(String filename) {
