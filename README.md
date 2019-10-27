@@ -143,3 +143,4 @@ The configuration file contains the following parameters:
 * <code>alpha</code>: used for zipf
 * <code>number_threads</code>
 * <code>num_of_requests</code>: number of requests per thread to generate, use -1 for infinite requests
+* <code>request_ratio</code>: enhancement of <code>read_write_ratio</code> with more predefined request types. The ratio should be declared in the order of <code>READ, WRITE, DELETE, CREATE_FILE, RMDIR, LS, CREATE_DIR</code>. For example: <code>0.25,0.25,0.25,0.25,0,0,0</code>
