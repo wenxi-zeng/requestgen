@@ -14,8 +14,18 @@ public class Request implements Serializable
         this.command = command;
     }
 
+    public Request(Command command, String filename) {
+        this.command = command;
+        this.filename = filename;
+    }
+
     public Request(Command command, String filename, long size) {
         this.command = command;
+        this.filename = filename;
+        this.size = size;
+    }
+
+    public Request(String filename, long size) {
         this.filename = filename;
         this.size = size;
     }
@@ -77,6 +87,6 @@ public class Request implements Serializable
     }
 
     public enum Command{
-        READ, WRITE
+        READ, WRITE, DELETE, CREATE_FILE, RMDIR, LS, CREATE_DIR
     }
 }

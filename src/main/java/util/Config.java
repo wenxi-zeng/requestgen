@@ -8,6 +8,7 @@ public class Config {
     private final static String CONFIG_PATH = "config";
 
     private final static String PROPERTY_RATIO_READ_WRITE = "read_write_ratio";
+    private final static String PROPERTY_RATIO_REQUEST = "request_ratio";
     private final static String PROPERTY_INTER_ARRIVAL_RATE_READ_WRITE = "read_write_inter_arrival_rate";
     private final static String PROPERTY_REQUEST_DISTRIBUTION = "request_distribution";
     private final static String PROPERTY_REQUEST_ZIPF_ALPHA = "alpha";
@@ -16,6 +17,11 @@ public class Config {
 
     public final static int RATIO_KEY_READ = 0;
     public final static int RATIO_KEY_WRITE = 1;
+    public final static int RATIO_KEY_DELETE = 2;
+    public final static int RATIO_KEY_CREATE_FILE = 3;
+    public final static int RATIO_KEY_RMDIR = 4;
+    public final static int RATIO_KEY_LS = 5;
+    public final static int RATIO_KEY_CREATE_DIR = 6;
     public final static String REQUEST_DISTRIBUTION_ZIPF = "zipf";
     public final static String REQUEST_DISTRIBUTION_EXP = "exp";
 
@@ -41,6 +47,13 @@ public class Config {
 
     public double[] getReadWriteRatio() {
         String[] ratio = rb.getString(PROPERTY_RATIO_READ_WRITE).split(",");
+        return Arrays.stream(ratio)
+                .mapToDouble(Double::parseDouble)
+                .toArray();
+    }
+
+    public double[] getRequestRatio() {
+        String[] ratio = rb.getString(PROPERTY_RATIO_REQUEST).split(",");
         return Arrays.stream(ratio)
                 .mapToDouble(Double::parseDouble)
                 .toArray();

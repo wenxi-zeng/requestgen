@@ -1,5 +1,6 @@
 package req;
 
+import commonmodels.Request;
 import req.rand.RandomGenerator;
 import req.rand.UniformGenerator;
 import util.Log;
@@ -155,13 +156,16 @@ public class StaticTree{
         List<K> l=new ArrayList<>(set);
         K chosen=l.get(generator.nextInt(l.size()));
         List<T> removeList=new ArrayList<>();
+        List<T> keepList=new ArrayList<>();
         for(int i=0;i<weight.size();++i){
             if(weight.get(i).contains(chosen)) removeList.add(list.get(i));
+            else keepList.add(list.get(i));
         }
-        list.removeAll(removeList);
-        plainShuffle(list,generator);
+        list.clear();
+        plainShuffle(keepList,generator);
         plainShuffle(removeList,generator);
-        list.addAll(0,removeList);
+        list.addAll(removeList);
+        list.addAll(keepList);
     }
 
     static public List<Integer> parseShuffle(String file) throws IOException{
@@ -203,7 +207,7 @@ public class StaticTree{
     }
 
     protected String randName(){
-        return String.format("%8X%8X",generator.nextInt(),generator.nextInt());
+        return String.format("%8X",generator.nextInt()).trim() + String.format("%8X",generator.nextInt()).trim();
     }
 
     public class RandTreeNode{
@@ -257,6 +261,18 @@ public class StaticTree{
 
     public int getFileSize(){
         return files.size();
+    }
+
+    public Request ls(int index){
+        if(index<nonEmptyDirs.size())
+            return new Request(Request.Command.LS,nonEmptyDirs.get(index).toString());
+        else return null;
+    }
+
+    public Request fileInfo(int index){
+        if(index>=files.size()) return null;
+        RandTreeNode result=files.get(index);
+        return new Request(result.toString(),result.size);
     }
 
     public void updateFileSize(int index,long newSize){

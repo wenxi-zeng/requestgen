@@ -18,6 +18,12 @@ public class ClientRequestGenerator extends RequestGenerator {
         this.generator.setUpper(tree.getFileSize() - 1);
     }
 
+    public ClientRequestGenerator(String filename, String rankFile) throws IOException {
+        this(filename);
+        if (rankFile != null)
+            this.tree.shuffleFilesUneven(rankFile);
+    }
+
     @Override
     public Request next(int threadId) {
         StaticTree.RandTreeNode file = tree.getFiles().get(generator.nextInt());
