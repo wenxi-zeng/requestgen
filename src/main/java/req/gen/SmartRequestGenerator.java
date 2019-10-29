@@ -6,7 +6,10 @@ import req.StaticTree;
 import util.AutoLock;
 import util.Config;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -140,5 +143,18 @@ public class SmartRequestGenerator extends RequestGenerator{
         map.put(new Request(Request.Command.LS), ratio[Config.RATIO_KEY_LS]);
         map.put(new Request(Request.Command.CREATE_DIR), ratio[Config.RATIO_KEY_CREATE_DIR]);
         return map;
+    }
+
+    public void saveDynamicTreeToFile(String filename) {
+        try {
+            FileWriter w = new FileWriter(filename);
+            BufferedWriter bw = new BufferedWriter(w);
+            PrintWriter wr = new PrintWriter(bw, true);
+            wr.print(dTree.getRoot() == null ? "null" : dTree.getRoot().toTreeString(false));
+            wr.close();
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

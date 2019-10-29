@@ -21,6 +21,11 @@ public class StaticTree{
     List<RandTreeNode> nonEmptyDirs=new ArrayList<>();  //  it's pointless to ls empty dirs
     List<RandTreeNode> files=new ArrayList<>();
     String sep=null;
+    RandTreeNode root;
+
+    public RandTreeNode getRoot() {
+        return root;
+    }
 
     public static Log getLog() {
         return log;
@@ -253,6 +258,10 @@ public class StaticTree{
                 else return parent.toString()+sep+name;
             }else return name;
         }
+
+        public String toTreeString(boolean isLast) {
+            return toString();
+        }
     }
 
     public int getNonEmptyDirSize(){
@@ -317,6 +326,7 @@ public class StaticTree{
 
         protected void parse(Tree tree,String filename,boolean fillEmpty) throws IOException{
             long count=1;
+            boolean isRoot = false;
             try(BufferedReader br=new BufferedReader(new InputStreamReader(new FileInputStream(filename),"UTF8"))){
                 for(String line;(line=br.readLine())!=null;++count){
                     //  skip blank line
@@ -334,6 +344,7 @@ public class StaticTree{
                     //  set name and possibly size
                     if(indent==0 && name.startsWith("directory")){  //  root
                         name=name.replaceFirst("directory\\s*","");
+                        isRoot = true;
 //						System.out.println("Root:"+name);
                     }else if(indent>0){   //  non root, check [size,modify time] part
                         Matcher m=reg.matcher(name);
@@ -372,6 +383,7 @@ public class StaticTree{
                     if(tree.sep!=null && !name.endsWith(tree.sep))
                         tree.files.add(node);
                     ancestors.add(node);
+                    if (isRoot) { tree.root = node; isRoot = false; }
                 }
                 rollback(0,tree,fillEmpty);
                 vacuum(tree,fillEmpty);

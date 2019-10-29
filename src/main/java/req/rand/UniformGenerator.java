@@ -20,7 +20,7 @@ public class UniformGenerator implements RandomGenerator{
 
 	@Override
 	public int nextInt(int upper){
-		return ThreadLocalRandom.current().nextInt(upper);
+		return upper < 1 ? 0 : ThreadLocalRandom.current().nextInt(upper);
 	}
 
 	@Override

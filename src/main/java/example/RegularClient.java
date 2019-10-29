@@ -116,6 +116,7 @@ public class RegularClient implements RequestThread.RequestGenerateThreadCallBac
                 this);
 
         service.start();
+        ((SmartRequestGenerator)generator).saveDynamicTreeToFile("dynamicTree.txt");
         System.exit(0);
     }
 

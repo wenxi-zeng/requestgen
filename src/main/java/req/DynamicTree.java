@@ -4,8 +4,7 @@ import commonmodels.Request;
 import req.rand.RandomGenerator;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class DynamicTree extends StaticTree{
     protected DynamicTree(){
@@ -33,6 +32,45 @@ public class DynamicTree extends StaticTree{
 
     protected class DynamicRandTreeNode extends RandTreeNode{
         Map<String,DynamicRandTreeNode> children=null;
+        boolean isLast = false;
+
+        @Override
+        public String toTreeString(boolean isLast) {
+            this.isLast = isLast;
+            StringBuilder prefix = new StringBuilder();
+            DynamicRandTreeNode iterator = (DynamicRandTreeNode)parent;
+
+            while (iterator != null && iterator.parent != null) {
+                if (iterator.isLast)
+                    prefix.insert(0, "    ");
+                else
+                    prefix.insert(0, "│   ");
+                iterator = (DynamicRandTreeNode)iterator.parent;
+            }
+            if (isLast) prefix.append("└── ");
+            else prefix.append("├── ");
+
+            StringBuilder result = new StringBuilder();
+
+            if (this.parent == null && this.name.equals(root.name)) {
+                result.append("directory ").append(this.name);
+            }
+            else {
+                result.append(prefix).append("[").append(String.format("%14s", size)).append(" ").append(String.format("%10s", System.currentTimeMillis() / 1000L)).append("]  ").append(name);
+            }
+
+            if (children != null) {
+                List<DynamicRandTreeNode> nodes = new ArrayList<>(children.values());
+                int i = 0;
+                for (; i < nodes.size() - 1; i++) {
+                    result.append('\n').append(nodes.get(i).toTreeString(false));
+                }
+
+                result.append('\n').append(nodes.get(i).toTreeString(true));
+            }
+
+            return result.toString();
+        }
 
         DynamicRandTreeNode removeUp(){
             if(parent!=null){
