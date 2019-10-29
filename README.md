@@ -1,6 +1,8 @@
 # Request Generator
 - [Request Generator](#request-generator)
-  - [0. Update Notes (10/26/2019)](#0-update-notes-10262019)
+  - [0. Update Notes (10/28/2019)](#0-update-notes-10282019)
+    - [10/28/2019](#10282019)
+    - [10/26/2019](#10262019)
   - [1. Test the Sample Code](#1-test-the-sample-code)
     - [1.1 Build project](#11-build-project)
     - [1.2 Run the jar](#12-run-the-jar)
@@ -12,10 +14,25 @@
       - [Implement callback](#implement-callback)
       - [Declare a generator](#declare-a-generator)
       - [Start generator service](#start-generator-service)
+      - [Save Dynamic Tree to File](#save-dynamic-tree-to-file)
       - [Declare and start file propagator](#declare-and-start-file-propagator)
   - [3. The Configuration File](#3-the-configuration-file)
 
-## 0. Update Notes (10/26/2019)
+## 0. Update Notes (10/28/2019)
+
+### 10/28/2019
+
+Changes to <code>SmartRequestGenerator</code>:
+
+* add <code>saveDynamicTreeToFile</code> method to store the dynamic tree to file
+* add sample usage code to <code>example/RegularClient.java</code>. You can also find the usage and explanation [here](#save-dynamic-tree-to-file)
+
+Bug fix:
+
+* fix the bug that changes to the configuration file does not take effect
+* fix generator illegal bounds error when all files are deleted 
+
+### 10/26/2019
 
 Two components are added:
 
@@ -123,6 +140,16 @@ Pass the <code>callback</code> and the <code>generator</code> to the service. Pa
             callBack);
 
     service.start();
+```
+
+#### Save Dynamic Tree to File
+
+The dynamic tree file is the file that you used for <code>FilePropagator</code> to populate files to the file system. That means the dynamic tree file has all the data in the file system.
+
+If you use <code>SmartRequestGenerator</code> with dynamic tree file, the generator keeps tracking the changes made to the file system. For example, when a <code>DELETE</code> or <code>CREATE_FILE</code> request is generated, the tree removes or adds the correspoding file. After runing for a while, the file system may be created a lot of new files or deleted a lot of exisitng files. You want to save the new tree for next time to use. Thus, you can use <code>saveDynamicTreeToFile</code> to do this.
+
+```java        
+    ((SmartRequestGenerator)generator).saveDynamicTreeToFile("dynamicTree.txt");
 ```
 
 #### Declare and start file propagator
