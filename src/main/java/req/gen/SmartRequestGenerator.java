@@ -146,6 +146,11 @@ public class SmartRequestGenerator extends RequestGenerator{
     }
 
     public void saveDynamicTreeToFile(String filename) {
+        if (dTree ==  null) {
+            System.out.println("Failed to save. No dynamic tree file provided");
+            return;
+        }
+
         try {
             FileWriter w = new FileWriter(filename);
             BufferedWriter bw = new BufferedWriter(w);
